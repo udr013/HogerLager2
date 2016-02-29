@@ -5,7 +5,7 @@ apply plugin: 'java'
 
 jar{
     manifest{
-        attributes "Main-Class":"MainFX"
+        attributes "Main-Class":"com.udr013.MainFX"
     }
 }
 

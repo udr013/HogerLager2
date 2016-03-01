@@ -21,12 +21,16 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
+import java.io.File;
+import java.net.URI;
 
 /**
  * Created by udr013 on 23-2-2016.
@@ -66,7 +70,7 @@ public class MainFX extends Application {
     public void start(Stage primaryStage) throws Exception {
 
         Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
-        System.out.println(Screen.getPrimary().getVisualBounds());
+        //System.out.println(Screen.getPrimary().getVisualBounds());
 
         //set Stage boundaries to visible bounds of the main screen
         primaryStage.setX(primaryScreenBounds.getMinX());
@@ -265,18 +269,27 @@ public class MainFX extends Application {
     private int getResult() {
         if (((newCard.cardValue > previousCard.cardValue)&&guess)||((newCard.cardValue < previousCard.cardValue)&&!guess)){
             instruction.setText("  Je hebt Goed Gekozen! Neem volgende kaart  ");
-            //AudioClip goodSound = new AudioClip("Sounds/Salvia.aiff");
-            //goodSound.play();
+            playSound("Salvia.aiff");
             return score++;
         } else if (previousCard.cardValue == newCard.cardValue) {
             instruction.setText("  De kaart is gelijk, Neem volgende kaart  ");
+            playSound("Volume-4.aiff");
             return score;
         } else {
             instruction.setText("  Helaas verkeerde gok! Neem volgende kaart  ");
-            //AudioClip badSound = new AudioClip("Sounds/Sorrel.aiff");
-            //badSound.play();
+            playSound("Sorrel.aiff");
             return score--;
         }
+    }
+
+    private void playSound(String filename){
+            File sound = new File("src/main/java/com.udr013/Sounds/"+ filename);
+            URI soundPath = sound.toURI();
+            AudioClip thatSound = new AudioClip(soundPath.toString());
+            //AudioClip goodSound = new AudioClip(""+u);
+            thatSound.play();
+
+
     }
 
 

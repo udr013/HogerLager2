@@ -6,9 +6,10 @@ import com.udr013.Cards.CardDeck;
 import com.udr013.MyFXComponents.MyButton;
 import com.udr013.MyFXComponents.MyImageView;
 import com.udr013.MyFXComponents.MyTextHBox;
-import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
@@ -17,11 +18,9 @@ import javafx.scene.effect.Effect;
 import javafx.scene.effect.Light;
 import javafx.scene.effect.Lighting;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -43,6 +42,8 @@ public class MainFX extends Application {
     Image card2 = new Image(newCard.cardImage);
     MyImageView oldCardImage = new MyImageView(card1);
     MyImageView newCardImage = new MyImageView(card2);
+    MyImageView newCardImage2 = new MyImageView("AllWheel/_Back.png");
+    MyImageView oldCardImage2 = new MyImageView("AllWheel/_Back.png");
     MyImageView counterField = new MyImageView("AllWheel/counterBackground.png");
     MyImageView scoreField = new MyImageView("AllWheel/counterBackground.png");
     MyButton yesButton = new MyButton("Ja");
@@ -56,6 +57,8 @@ public class MainFX extends Application {
     Text instruction;
     StackPane cardsRemainPanel;
     StackPane scorePanel;
+    StackPane oldCards;
+    StackPane newCards;
     int score=0;
     boolean guess;
 
@@ -104,12 +107,17 @@ public class MainFX extends Application {
         cardsRemainPanel = new StackPane(counterField,remainText);
         scorePanel = new StackPane(scoreField,scoreText);
 
+
+
         VBox infoField= new VBox(cardsRemain,cardsRemainPanel,scoreShow, scorePanel);
         infoField.setPadding(new Insets(0,30,30,30));
 
         buttonGroup = new HBox(15, higherButton, lowerButton);
         buttonGroup.setPadding(new Insets(0, 0, 30, 0));
-        cardGroup = new HBox(30, oldCardImage, newCardImage,infoField);
+
+        oldCards = new StackPane(oldCardImage2,oldCardImage);
+        newCards = new StackPane(newCardImage2,newCardImage);
+        cardGroup = new HBox(30, oldCards, newCards,infoField);
 
         MyTextHBox textHBox = new MyTextHBox(instruction);
         textHBox.maxWidthProperty().bind(instruction.wrappingWidthProperty().add(49));
@@ -140,17 +148,18 @@ public class MainFX extends Application {
 
 
         higherButton.setOnAction(e -> {
-            animateCard();
-            //instruction.setText("  Je hebt HOGER Gekozen, neem volgende kaart  ");
+            //animateCard();
+
             guess = true;
             getUpdatedScreen();
+
 
         });
 
         lowerButton.setOnAction(e -> {
-            //instruction.setText("  Je hebt LAGER Gekozen, neem volgende kaart  ");
+            //animateCard();
             guess= false;
-            getUpdatedScreen();
+           getUpdatedScreen();
         });
 
 
@@ -191,22 +200,32 @@ public class MainFX extends Application {
 
     public void animateCard() {
         TranslateTransition tt =
-                new TranslateTransition(Duration.seconds(3), newCardImage);
+                new TranslateTransition(Duration.seconds(1), newCardImage);
 
         tt.setFromX( -(newCardImage.getFitWidth()) );
         tt.setToX( oldCardImage.getX() );
-        tt.setCycleCount( Timeline.INDEFINITE );
+        //tt.setCycleCount( Timeline.INDEFINITE );
         tt.play();
+        tt.setOnFinished(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                getUpdatedScreen();
+            }
+        });
+
+
+
     }
 
     public void getUpdatedScreen(){
 
         previousCard = newCard;
-
+        oldCardImage2.setImage(new Image(previousCard.cardImage));
         oldCardImage.setImage(new Image(previousCard.cardImage));
-
+        newCardImage2.setImage(new Image(newCard.cardImage));
         cards.remove(newCard);
         newCard = getNewCard();
+
         newCardImage.setImage(new Image(newCard.cardImage));
         getResult();
 
@@ -246,16 +265,16 @@ public class MainFX extends Application {
     private int getResult() {
         if (((newCard.cardValue > previousCard.cardValue)&&guess)||((newCard.cardValue < previousCard.cardValue)&&!guess)){
             instruction.setText("  Je hebt Goed Gekozen! Neem volgende kaart  ");
-            AudioClip goodSound = new AudioClip("Sounds/Salvia.aiff");
-            goodSound.play();
+            //AudioClip goodSound = new AudioClip("Sounds/Salvia.aiff");
+            //goodSound.play();
             return score++;
         } else if (previousCard.cardValue == newCard.cardValue) {
             instruction.setText("  De kaart is gelijk, Neem volgende kaart  ");
             return score;
         } else {
             instruction.setText("  Helaas verkeerde gok! Neem volgende kaart  ");
-            AudioClip badSound = new AudioClip("Sounds/Sorrel.aiff");
-            badSound.play();
+            //AudioClip badSound = new AudioClip("Sounds/Sorrel.aiff");
+            //badSound.play();
             return score--;
         }
     }

@@ -63,7 +63,7 @@ public class MainFX extends Application {
     StackPane scorePanel;
     StackPane oldCards;
     StackPane newCards;
-    int score=0;
+    int score = 0;
     boolean guess;
 
     @Override
@@ -77,17 +77,6 @@ public class MainFX extends Application {
         primaryStage.setY(primaryScreenBounds.getMinY());
         primaryStage.setWidth(primaryScreenBounds.getWidth());
         primaryStage.setHeight(primaryScreenBounds.getHeight());
-        //primaryStage.setWidth(primaryScreenBounds.getMaxX());
-        //primaryStage.setHeight(primaryScreenBounds.getMaxY());
-
-        //card1.getHeight();
-        //card1.getHeight();
-//        oldCardImage.setFitHeight(card1.getHeight()/2);
-//        oldCardImage.setFitWidth(card1.getWidth()/2);
-//
-//        newCardImage.setFitHeight(card1.getHeight()/2);
-//        newCardImage.setFitWidth(card1.getWidth()/2);
-
 
 
         instruction = new Text("  Doe een gok of de volgende kaart hoger of lager is  ");
@@ -95,8 +84,8 @@ public class MainFX extends Application {
         //instruction.setEffect(getLighting(Color.WHITE));
         instruction.setFont(Font.font(24));
 
-        remainText  = getDigits((cards.getSize()-1),Color.BLUE);
-        scoreText  = getDigits(score, Color.DARKGREEN);
+        remainText = getDigits((cards.getSize() - 1), Color.BLUE);
+        scoreText = getDigits(score, Color.DARKGREEN);
 
         Text cardsRemainHint = new Text(" Kaarten over ");
         cardsRemainHint.setFont(Font.font(24));
@@ -108,20 +97,19 @@ public class MainFX extends Application {
         scoreHint.setFill(Color.WHITE);
         MyTextHBox scoreShow = new MyTextHBox(scoreHint);
 
-        cardsRemainPanel = new StackPane(counterField,remainText);
-        scorePanel = new StackPane(scoreField,scoreText);
+        cardsRemainPanel = new StackPane(counterField, remainText);
+        scorePanel = new StackPane(scoreField, scoreText);
 
 
-
-        VBox infoField= new VBox(cardsRemain,cardsRemainPanel,scoreShow, scorePanel);
-        infoField.setPadding(new Insets(0,30,30,30));
+        VBox infoField = new VBox(cardsRemain, cardsRemainPanel, scoreShow, scorePanel);
+        infoField.setPadding(new Insets(0, 30, 30, 30));
 
         buttonGroup = new HBox(15, higherButton, lowerButton);
         buttonGroup.setPadding(new Insets(0, 0, 30, 0));
 
-        oldCards = new StackPane(oldCardImage2,oldCardImage);
-        newCards = new StackPane(newCardImage2,newCardImage);
-        cardGroup = new HBox(30, oldCards, newCards,infoField);
+        oldCards = new StackPane(oldCardImage2, oldCardImage);
+        newCards = new StackPane(newCardImage2, newCardImage);
+        cardGroup = new HBox(30, oldCards, newCards, infoField);
 
         MyTextHBox textHBox = new MyTextHBox(instruction);
         textHBox.maxWidthProperty().bind(instruction.wrappingWidthProperty().add(49));
@@ -137,7 +125,7 @@ public class MainFX extends Application {
 
 
         yesButton.setOnAction(e -> {
-            score=0;
+            score = 0;
             cards = new CardDeck();
             try {
                 start(primaryStage);
@@ -162,8 +150,8 @@ public class MainFX extends Application {
 
         lowerButton.setOnAction(e -> {
             //animateCard();
-            guess= false;
-           getUpdatedScreen();
+            guess = false;
+            getUpdatedScreen();
         });
 
 
@@ -178,25 +166,25 @@ public class MainFX extends Application {
 
     private HBox getDigits(int size, Color color) {
         HBox digitBox = new HBox();
-        String digits = ""+(size);
-        if (digits.length()==1){
-            digits ="0"+digits;
-        }else {
-            digits = ""+(size);
+        String digits = "" + (size);
+        if (digits.length() == 1) {
+            digits = "0" + digits;
+        } else {
+            digits = "" + (size);
         }
 
-        if(Integer.parseInt(digits)<=0){
-            color =Color.CRIMSON;
+        if (Integer.parseInt(digits) <= 0) {
+            color = Color.CRIMSON;
         }
-        String firstnr =  digits.substring(0,1);
-        MyImageView firstDigit = new MyImageView("Digits/clock_stopwatch_digit_" + firstnr+".png");
+        String firstnr = digits.substring(0, 1);
+        MyImageView firstDigit = new MyImageView("Digits/clock_stopwatch_digit_" + firstnr + ".png");
         firstDigit.setEffect(getLighting(color));
 
-        String secondnr = digits.substring(1,2);
-        MyImageView secondDigit = new MyImageView("Digits/clock_stopwatch_digit_" + secondnr+".png");
+        String secondnr = digits.substring(1, 2);
+        MyImageView secondDigit = new MyImageView("Digits/clock_stopwatch_digit_" + secondnr + ".png");
         secondDigit.setEffect(getLighting(color));
 
-        digitBox.getChildren().addAll(firstDigit,secondDigit);
+        digitBox.getChildren().addAll(firstDigit, secondDigit);
         digitBox.setAlignment(Pos.CENTER);
         return digitBox;
 
@@ -206,8 +194,8 @@ public class MainFX extends Application {
         TranslateTransition tt =
                 new TranslateTransition(Duration.seconds(1), newCardImage);
 
-        tt.setFromX( -(newCardImage.getFitWidth()) );
-        tt.setToX( oldCardImage.getX() );
+        tt.setFromX(-(newCardImage.getFitWidth()));
+        tt.setToX(oldCardImage.getX());
         //tt.setCycleCount( Timeline.INDEFINITE );
         tt.play();
         tt.setOnFinished(new EventHandler<ActionEvent>() {
@@ -216,12 +204,9 @@ public class MainFX extends Application {
                 getUpdatedScreen();
             }
         });
-
-
-
     }
 
-    public void getUpdatedScreen(){
+    public void getUpdatedScreen() {
 
         previousCard = newCard;
         oldCardImage2.setImage(new Image(previousCard.cardImage));
@@ -233,16 +218,14 @@ public class MainFX extends Application {
         newCardImage.setImage(new Image(newCard.cardImage));
         getResult();
 
-        //int size = (cards.getSize()-1);
-
-        remainText= getDigits(cards.getSize()-1, Color.BLUE);
-        scoreText= getDigits(score, Color.DARKGREEN);
+        remainText = getDigits(cards.getSize() - 1, Color.BLUE);
+        scoreText = getDigits(score, Color.DARKGREEN);
 
         cardsRemainPanel.getChildren().clear();
-        cardsRemainPanel.getChildren().addAll(counterField,remainText);
+        cardsRemainPanel.getChildren().addAll(counterField, remainText);
 
         scorePanel.getChildren().clear();
-        scorePanel.getChildren().addAll(scoreField,scoreText);
+        scorePanel.getChildren().addAll(scoreField, scoreText);
 
 
         if (cards.getSize() == 1) {
@@ -267,7 +250,7 @@ public class MainFX extends Application {
     }
 
     private int getResult() {
-        if (((newCard.cardValue > previousCard.cardValue)&&guess)||((newCard.cardValue < previousCard.cardValue)&&!guess)){
+        if (((newCard.cardValue > previousCard.cardValue) && guess) || ((newCard.cardValue < previousCard.cardValue) && !guess)) {
             instruction.setText("  Je hebt Goed Gekozen! Neem volgende kaart  ");
             playSound("Salvia.aiff");
             return score++;
@@ -282,12 +265,11 @@ public class MainFX extends Application {
         }
     }
 
-    private void playSound(String filename){
-            File sound = new File("src/main/java/com.udr013/Sounds/"+ filename);
-            URI soundPath = sound.toURI();
-            AudioClip thatSound = new AudioClip(soundPath.toString());
-            //AudioClip goodSound = new AudioClip(""+u);
-            thatSound.play();
+    private void playSound(String filename) {
+        File sound = new File("src/main/java/com.udr013/Sounds/" + filename);
+        URI soundPath = sound.toURI();
+        AudioClip thatSound = new AudioClip(soundPath.toString());
+        thatSound.play();
 
 
     }
